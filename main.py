@@ -12,10 +12,21 @@ spaceship_x = 608
 spaceship_y = 650
 spaceship_x_change = 0
 
+# green monster variables
+green_monster_img = pygame.image.load("images/green_monster.png")
+green_monster_x = 608
+green_monster_y = 10
+green_monster_x_change = 0
+
 
 # spaceship function
 def spaceship(x, y):
     screen.blit(spaceship_img, (x, y))
+
+
+# green monster function
+def green_monster(x, y):
+    screen.blit(green_monster_img, (x, y))
 
 
 # setup title and icon
@@ -44,6 +55,7 @@ while running:
     # handle spaceship movement
     spaceship_x += spaceship_x_change
     spaceship(spaceship_x, spaceship_y)
+    green_monster(green_monster_x, green_monster_y)
 
     # keep the spaceship in the screen
     if spaceship_x <= 5:
