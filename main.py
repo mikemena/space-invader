@@ -13,11 +13,19 @@ spaceship_x = 608
 spaceship_y = 650
 spaceship_x_change = 0
 
+# missle variables
+missle_img = pygame.image.load("images/missile.png")
+missle_x = 0
+missle_y = 650
+missle_x_change = 0
+missle_y_change = 0.6
+visible_missle = False
+
 # green monster variables
 green_monster_img = pygame.image.load("images/green_monster.png")
 green_monster_x = random.randint(0, 608)
 green_monster_y = random.randint(0, 10)
-green_monster_x_change = 2.0
+green_monster_x_change = 0.5
 green_monster_y_change = 10
 
 
@@ -29,6 +37,13 @@ def spaceship(x, y):
 # green monster function
 def green_monster(x, y):
     screen.blit(green_monster_img, (x, y))
+
+
+# shoot missle function
+def shoot_missle(x, y):
+    global visible_missle
+    visible_missle = True
+    screen.blit(missle_img, (x + 16, y + 10))
 
 
 # setup title and icon
@@ -46,12 +61,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # handle press arrow key events
+        # handle press key events
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                spaceship_x_change = -2.0
+                spaceship_x_change = -1.2
             if event.key == pygame.K_RIGHT:
-                spaceship_x_change = 2.0
+                spaceship_x_change = 1.2
+            if event.key == pygame.K_SPACE:
+                if not visible_missle:
+                    missle_x = spaceship_x
+                    shoot_missle(missle_x, missle_y)
         # handle key release
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -71,11 +90,19 @@ while running:
 
     # keep the green monster in the screen
     if green_monster_x <= 5:
-        green_monster_x_change = 2.0
+        green_monster_x_change = 0.5
         green_monster_y += green_monster_y_change
     elif green_monster_x >= 1210:
-        green_monster_x_change = -2.0
+        green_monster_x_change = -0.5
         green_monster_y += green_monster_y_change
+
+    # missle movement
+    if missle_y <= -64:
+        missle_y = 500
+        visible_missle = False
+    if visible_missle:
+        shoot_missle(missle_x, missle_y)
+        missle_y -= missle_y_change
 
     spaceship(spaceship_x, spaceship_y)
     green_monster(green_monster_x, green_monster_y)
