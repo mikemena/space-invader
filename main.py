@@ -18,7 +18,7 @@ missle_img = pygame.image.load("images/missile.png")
 missle_x = 0
 missle_y = 650
 missle_x_change = 0
-missle_y_change = 3.5
+missle_y_change = 0.7
 visible_missle = False
 
 # green monster variables
@@ -43,7 +43,7 @@ def green_monster(x, y):
 def shoot_missle(x, y):
     global visible_missle
     visible_missle = True
-    screen.blit(missle_img, (x + 16, y + 10))
+    screen.blit(missle_img, (x + 1, y + 10))
 
 
 # setup title and icon
@@ -97,8 +97,8 @@ while running:
         green_monster_y += green_monster_y_change
 
     # missle movement
-    if missle_y <= -64:
-        missle_y = 500
+    if missle_y <= -25:
+        missle_y = 600
         visible_missle = False
     if visible_missle:
         shoot_missle(missle_x, missle_y)
