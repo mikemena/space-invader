@@ -18,14 +18,14 @@ missle_img = pygame.image.load("images/missile.png")
 missle_x = 0
 missle_y = 650
 missle_x_change = 0
-missle_y_change = 0.6
+missle_y_change = 3.5
 visible_missle = False
 
 # green monster variables
 green_monster_img = pygame.image.load("images/green_monster.png")
 green_monster_x = random.randint(0, 608)
 green_monster_y = random.randint(0, 10)
-green_monster_x_change = 0.5
+green_monster_x_change = 0.8
 green_monster_y_change = 10
 
 
