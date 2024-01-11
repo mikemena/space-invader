@@ -19,8 +19,11 @@ missle_img = pygame.image.load("images/missile.png")
 missle_x = 0
 missle_y = 650
 missle_x_change = 0
-missle_y_change = 0.7
+missle_y_change = 2.5
 visible_missle = False
+
+# score
+score = 0
 
 # green monster variables
 green_monster_img = pygame.image.load("images/green_monster.png")
@@ -116,6 +119,11 @@ while running:
 
     # collision
     collision = target_hit(green_monster_x, green_monster_y, missle_x, missle_y)
+    if collision:
+        missle_y = 600
+        visible_missle = False
+        score += 1
+        print(score)
 
     spaceship(spaceship_x, spaceship_y)
     green_monster(green_monster_x, green_monster_y)
