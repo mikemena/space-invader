@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # pygame setup
 pygame.init()
@@ -44,6 +45,15 @@ def shoot_missle(x, y):
     global visible_missle
     visible_missle = True
     screen.blit(missle_img, (x + 1, y + 10))
+
+
+# detect collision
+def target_hit(x_1, y_1, x_2, y_2):
+    distance = math.sqrt(math.pow(x_1 - x_2, 2) + math.pow(y_2 - y_1, 2))
+    if distance < 27:
+        return True
+    else:
+        return False
 
 
 # setup title and icon
@@ -103,6 +113,9 @@ while running:
     if visible_missle:
         shoot_missle(missle_x, missle_y)
         missle_y -= missle_y_change
+
+    # collision
+    collision = target_hit(green_monster_x, green_monster_y, missle_x, missle_y)
 
     spaceship(spaceship_x, spaceship_y)
     green_monster(green_monster_x, green_monster_y)
