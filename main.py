@@ -105,7 +105,7 @@ while running:
                 spaceship_x_change = 1.2
             if event.key == pygame.K_SPACE:
                 if not visible_missle:
-                    missle_x = spaceship_x
+                    missle_x = spaceship_x + (spaceship_width - missle_width) / 2
                     shoot_missle(missle_x, missle_y)
         # handle key release
         if event.type == pygame.KEYUP:
