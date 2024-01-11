@@ -22,6 +22,7 @@ missle_x_change = 0
 missle_y_change = 2.5
 visible_missle = False
 
+
 # score
 score = 0
 
@@ -119,13 +120,24 @@ while running:
 
     # collision
     collision = target_hit(green_monster_x, green_monster_y, missle_x, missle_y)
+    # explosion
+    explosion_img = pygame.image.load("images/explosion.png")
     if collision:
+        screen.blit(explosion_img, (green_monster_x, green_monster_y))
+        # Update the display to show the explosion
+        pygame.display.update()
+        # Delay for half a second to show the explosion
+        pygame.time.delay(800)
+        # Reset the missile
         missle_y = 600
         visible_missle = False
+        # Increase the score
         score += 1
         print(score)
         green_monster_x = random.randint(0, 608)
         green_monster_y = random.randint(0, 10)
+
+    # explode
 
     spaceship(spaceship_x, spaceship_y)
     green_monster(green_monster_x, green_monster_y)
