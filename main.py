@@ -26,12 +26,20 @@ visible_missle = False
 # score
 score = 0
 
-# green monster variables
-green_monster_img = pygame.image.load("images/green_monster.png")
-green_monster_x = random.randint(0, 608)
-green_monster_y = random.randint(0, 10)
-green_monster_x_change = 0.8
-green_monster_y_change = 10
+# monster variables
+green_monster_img = []
+green_monster_x = []
+green_monster_y = []
+green_monster_x_change = []
+green_monster_y_change = []
+monster_count = 8
+
+for e in range(monster_count):
+    green_monster_img.append(pygame.image.load("images/green_monster.png"))
+    green_monster_x.append(random.randint(0, 608))
+    green_monster_y.append(random.randint(0, 10))
+    green_monster_x_change.append(0.8)
+    green_monster_y_change.append(10)
 
 
 # spaceship function
@@ -40,8 +48,8 @@ def spaceship(x, y):
 
 
 # green monster function
-def green_monster(x, y):
-    screen.blit(green_monster_img, (x, y))
+def green_monster(x, y, monstro):
+    screen.blit(green_monster_img[monstro], (x, y))
 
 
 # shoot missle function
@@ -100,15 +108,38 @@ while running:
         spaceship_x = 1210
 
     # handle green monster movement
-    green_monster_x += green_monster_x_change
+    for monst in range(monster_count):
+        green_monster_x[monst] += green_monster_x_change[monst]
 
-    # keep the green monster in the screen
-    if green_monster_x <= 5:
-        green_monster_x_change = 0.5
-        green_monster_y += green_monster_y_change
-    elif green_monster_x >= 1210:
-        green_monster_x_change = -0.5
-        green_monster_y += green_monster_y_change
+        # keep the green monster in the screen
+        if green_monster_x[monst] <= 5:
+            green_monster_x_change[monst] = 0.5
+            green_monster_y[monst] += green_monster_y_change[monst]
+        elif green_monster_x[monst] >= 1210:
+            green_monster_x_change[monst] = -0.5
+            green_monster_y[monst] += green_monster_y_change[monst]
+        # collision
+        collision = target_hit(
+            green_monster_x[monst], green_monster_y[monst], missle_x, missle_y
+        )
+        # explosion
+        explosion_img = pygame.image.load("images/explosion.png")
+        if collision:
+            screen.blit(explosion_img, (green_monster_x[monst], green_monster_y[monst]))
+            # Update the display to show the explosion
+            pygame.display.update()
+            # Delay for half a second to show the explosion
+            pygame.time.delay(800)
+            # Reset the missile
+            missle_y = 600
+            visible_missle = False
+            # Increase the score
+            score += 1
+            print(score)
+            green_monster_x[monst] = random.randint(0, 608)
+            green_monster_y[monst] = random.randint(0, 10)
+
+        green_monster(green_monster_x[monst], green_monster_y[monst], monst)
 
     # missle movement
     if missle_y <= -25:
@@ -118,28 +149,9 @@ while running:
         shoot_missle(missle_x, missle_y)
         missle_y -= missle_y_change
 
-    # collision
-    collision = target_hit(green_monster_x, green_monster_y, missle_x, missle_y)
-    # explosion
-    explosion_img = pygame.image.load("images/explosion.png")
-    if collision:
-        screen.blit(explosion_img, (green_monster_x, green_monster_y))
-        # Update the display to show the explosion
-        pygame.display.update()
-        # Delay for half a second to show the explosion
-        pygame.time.delay(800)
-        # Reset the missile
-        missle_y = 600
-        visible_missle = False
-        # Increase the score
-        score += 1
-        print(score)
-        green_monster_x = random.randint(0, 608)
-        green_monster_y = random.randint(0, 10)
-
     # explode
 
     spaceship(spaceship_x, spaceship_y)
-    green_monster(green_monster_x, green_monster_y)
+
     # update screen
     pygame.display.update()
