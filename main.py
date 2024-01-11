@@ -124,6 +124,8 @@ while running:
         visible_missle = False
         score += 1
         print(score)
+        green_monster_x = random.randint(0, 608)
+        green_monster_y = random.randint(0, 10)
 
     spaceship(spaceship_x, spaceship_y)
     green_monster(green_monster_x, green_monster_y)
