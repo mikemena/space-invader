@@ -4,24 +4,30 @@ import math
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1616, 799))
 clock = pygame.time.Clock()
 running = True
 
 # spaceship variables
 spaceship_img = pygame.image.load("images/spaceship.png")
-spaceship_x = 608
-spaceship_y = 675
+spaceship_width = spaceship_img.get_width()
+# start the spaceship in the middle of the screen (screen is 1616 horizontal)
+spaceship_x = 808
+# start the spaceship at the bottom of the screen (screen is 799 height)
+spaceship_y = 750
 spaceship_x_change = 0
 
 # missle variables
 missle_img = pygame.image.load("images/missile.png")
+missle_width = missle_img.get_width()
 missle_x = 0
-missle_y = 650
+missle_y = 750
 missle_x_change = 0
 missle_y_change = 2.5
 visible_missle = False
 
+# explosion image
+explosion_img = pygame.image.load("images/explode.png")
 
 # score
 score = 0
@@ -112,8 +118,8 @@ while running:
     # keep the spaceship in the screen
     if spaceship_x <= 5:
         spaceship_x = 5
-    elif spaceship_x >= 1210:
-        spaceship_x = 1210
+    elif spaceship_x >= 1580:
+        spaceship_x = 1580
 
     # handle monster movement
     for monst in range(monster_count):
@@ -123,13 +129,12 @@ while running:
         if monster_x[monst] <= 5:
             monster_x_change[monst] = 0.5
             monster_y[monst] += monster_y_change[monst]
-        elif monster_x[monst] >= 1210:
+        elif monster_x[monst] >= 1590:  # monster moves to the right of screen
             monster_x_change[monst] = -0.5
             monster_y[monst] += monster_y_change[monst]
         # collision
         collision = target_hit(monster_x[monst], monster_y[monst], missle_x, missle_y)
         # explosion
-        explosion_img = pygame.image.load("images/explode.png")
         if collision:
             screen.blit(explosion_img, (monster_x[monst], monster_y[monst]))
             # Update the display to show the explosion
@@ -137,7 +142,7 @@ while running:
             # Delay for half a second to show the explosion
             pygame.time.delay(800)
             # Reset the missile
-            missle_y = 600
+            missle_y = 700
             visible_missle = False
             # Increase the score
             score += 1
@@ -149,7 +154,7 @@ while running:
 
     # missle movement
     if missle_y <= -25:
-        missle_y = 600
+        missle_y = 700
         visible_missle = False
     if visible_missle:
         shoot_missle(missle_x, missle_y)
