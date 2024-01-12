@@ -62,7 +62,8 @@ for e in range(monster_count):
     monster_x.append(random.randint(0, 608))
     monster_y.append(random.randint(0, 10))
     monster_x_change.append(0.8)
-    monster_y_change.append(10)
+    # shift monster down when they reach the right side of the screen
+    monster_y_change.append(100)
 
 
 # show score function
@@ -103,6 +104,15 @@ pygame.display.set_icon(icon)
 pygame.display.set_caption("Space Invaders")
 background = pygame.image.load("images/Background.jpg")
 
+# end game message
+end_font = pygame.font.Font("freesansbold.ttf", 40)
+
+
+def final_text():
+    game_over = end_font.render("GAME OVER", True, (245, 132, 66))
+    screen.blit(game_over, (800, 400))
+
+
 # main game loop
 while running:
     # background image
@@ -141,6 +151,13 @@ while running:
 
     # handle monster movement
     for monst in range(monster_count):
+        # end game
+        # show game over when the monster hits the rocket @ 700
+        if monster_y[monst] > 750:
+            for k in range(monster_count):
+                monster_y[k] = 1000
+            final_text()
+            break
         monster_x[monst] += monster_x_change[monst]
 
         # keep the green monster in the screen
@@ -174,7 +191,7 @@ while running:
         green_monster(monster_x[monst], monster_y[monst], monst)
 
     # missle movement
-    if missle_y <= -50:
+    if missle_y <= -80:
         missle_y = 700
         visible_missle = False
     if visible_missle:
