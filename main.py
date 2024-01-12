@@ -47,9 +47,6 @@ monster_images = [
     pygame.image.load("images/red_monster.png"),
     pygame.image.load("images/blue_monster.png"),
     pygame.image.load("images/orange_monster.png"),
-    # pygame.image.load("images/rat2.png"),
-    # pygame.image.load("images/rat5.png"),
-    # pygame.image.load("images/rat6.png"),
 ]
 monster_img = []
 monster_x = []
