@@ -1,12 +1,18 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1616, 799))
 clock = pygame.time.Clock()
 running = True
+
+# handle music
+mixer.music.load("sounds/background.mp3")
+mixer.music.set_volume(0.7)
+mixer.music.play(-1)
 
 # spaceship variables
 spaceship_img = pygame.image.load("images/spaceship.png")
@@ -31,6 +37,9 @@ explosion_img = pygame.image.load("images/explode.png")
 
 # score
 score = 0
+score_font = pygame.font.Font("freesansbold.ttf", 32)
+text_x = 10
+text_y = 10
 
 # monster images
 monster_images = [
@@ -38,6 +47,9 @@ monster_images = [
     pygame.image.load("images/red_monster.png"),
     pygame.image.load("images/blue_monster.png"),
     pygame.image.load("images/orange_monster.png"),
+    # pygame.image.load("images/rat2.png"),
+    # pygame.image.load("images/rat5.png"),
+    # pygame.image.load("images/rat6.png"),
 ]
 monster_img = []
 monster_x = []
@@ -54,6 +66,12 @@ for e in range(monster_count):
     monster_y.append(random.randint(0, 10))
     monster_x_change.append(0.8)
     monster_y_change.append(10)
+
+
+# show score function
+def show_score(x, y):
+    text = score_font.render(f"Score: {score}", True, (245, 132, 66))
+    screen.blit(text, (x, y))
 
 
 # spaceship function
@@ -104,6 +122,9 @@ while running:
             if event.key == pygame.K_RIGHT:
                 spaceship_x_change = 1.2
             if event.key == pygame.K_SPACE:
+                missle_sound = mixer.Sound("sounds/shot.mp3")
+                missle_sound.set_volume(0.3)
+                missle_sound.play()
                 if not visible_missle:
                     missle_x = spaceship_x + (spaceship_width - missle_width) / 2
                     shoot_missle(missle_x, missle_y)
@@ -136,6 +157,9 @@ while running:
         collision = target_hit(monster_x[monst], monster_y[monst], missle_x, missle_y)
         # explosion
         if collision:
+            collision_sound = mixer.Sound("sounds/explosion.mp3")
+            collision_sound.set_volume(0.3)
+            collision_sound.play()
             screen.blit(explosion_img, (monster_x[monst], monster_y[monst]))
             # Update the display to show the explosion
             pygame.display.update()
@@ -146,14 +170,14 @@ while running:
             visible_missle = False
             # Increase the score
             score += 1
-            print(score)
+
             monster_x[monst] = random.randint(0, 608)
             monster_y[monst] = random.randint(0, 10)
 
         green_monster(monster_x[monst], monster_y[monst], monst)
 
     # missle movement
-    if missle_y <= -25:
+    if missle_y <= -50:
         missle_y = 700
         visible_missle = False
     if visible_missle:
@@ -164,5 +188,7 @@ while running:
 
     spaceship(spaceship_x, spaceship_y)
 
+    # show score
+    show_score(text_x, text_y)
     # update screen
     pygame.display.update()
